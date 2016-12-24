@@ -57,16 +57,17 @@ func (f *FetcherSuite) registerResource(resourceID int, name string, fatherId, m
 
 func (f *FetcherSuite) TestFetchURL(c *check.C) {
 	result, err := f.Fetcher.URL(myAPIRoot+"1", http.Header{}, []string{"father", "mother"})
+	resource := result["resource"].(M)
 
 	c.Assert(err, check.IsNil)
-	c.Assert(result["id"], check.Equals, float64(1))
-	c.Assert(result["name"], check.Equals, "Son")
+	c.Assert(resource["id"], check.Equals, float64(1))
+	c.Assert(resource["name"], check.Equals, "Son")
 
-	father := result["_rels"].(M)["father"].(M)
+	father := result["rels"].(M)["father"].(M)
 	c.Assert(father["id"], check.Equals, float64(2))
 	c.Assert(father["name"], check.Equals, "Father")
 
-	mother := result["_rels"].(M)["mother"].(M)
+	mother := result["rels"].(M)["mother"].(M)
 	c.Assert(mother["id"], check.Equals, float64(3))
 	c.Assert(mother["name"], check.Equals, "Mother")
 }

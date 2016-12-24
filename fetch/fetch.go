@@ -18,11 +18,14 @@ type Fetcher struct {
 }
 
 func (f *Fetcher) URL(url string, header http.Header, includes []string) (M, error) {
+	result := M{}
 	resource := M{}
 	resultHeaders, err := f.simpleFetch(url, header, &resource)
 	if err != nil {
 		return nil, err
 	}
+	result["resource"] = resource
+
 	schemaURL, err := extractSchemaURL(resultHeaders.Get("content-type"))
 	if err != nil {
 		return nil, err
@@ -34,9 +37,9 @@ func (f *Fetcher) URL(url string, header http.Header, includes []string) (M, err
 	}
 
 	if len(includes) > 0 {
-		resource["_rels"] = f.fetchRels(header, resource, schema, includes)
+		result["rels"] = f.fetchRels(header, resource, schema, includes)
 	}
-	return resource, nil
+	return result, nil
 }
 
 func (f *Fetcher) fetchRels(header http.Header, resource map[string]interface{}, schema *Schema, includes []string) M {
