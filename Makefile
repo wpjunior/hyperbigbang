@@ -1,9 +1,9 @@
 .PHONY: setup run
 setup:
 	go get github.com/codegangsta/gin
+	make deps
 
 run:
 	gin -b hyperbigbang run
 
-test:
-	go test ./...
+include go.mk

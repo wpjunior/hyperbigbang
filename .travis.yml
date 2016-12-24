@@ -7,5 +7,5 @@ go:
 install:
   - make setup
 
-test:
+script:
   - make test
